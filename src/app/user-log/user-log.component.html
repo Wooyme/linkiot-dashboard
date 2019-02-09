@@ -1,0 +1,61 @@
+<mk-box [isRemovable]="false">
+  <mk-box-content>
+    <div class="col-lg-12">
+      <div class="form-inline">
+        <div class="form-group pull-right">
+          <input type="text" class="form-control" placeholder="用户名" [(ngModel)]="filterUsername">
+          <select class="form-control" [(ngModel)]="filterType">
+            <option value="-1">无</option>
+            <option value="0">登录登出</option>
+            <option value="1">用户操作</option>
+            <option value="2">设备操作</option>
+            <option value="3">设备指令</option>
+          </select>
+          <input class="form-control" type="button" value="筛选" (click)="refresh()">
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-12" style="margin-top: 20px;">
+      <div class="table-responsive">
+        <table class="table table-bordered">
+          <thead>
+          <tr>
+            <th><input type="checkbox"></th>
+            <th>用户名</th>
+            <th nowrap="nowrap">类型</th>
+            <th>行为</th>
+            <th>发生时间</th>
+            <th>操作</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let log of logs">
+            <td><input type="checkbox"></td>
+            <td>{{log.username}}</td>
+            <td>{{log['typeStr']}}</td>
+            <td class="flex-td">{{log.action}}</td>
+            <td>{{log.createTime}}</td>
+            <td>
+              <div class="btn-toolbar" style="display: flex">
+                <button class="btn btn-info btn-xs" (click)="detail(log)">查看详情</button>
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="col-lg-12">
+      <div class="form-inline">
+        <div class="form-group pull-right">
+          <input class="form-control" type="button" value="上一页" [disabled]="page==1" (click)="goto(page-1)">
+          <input class="form-control" style="width: 40px" type="text" [value]="page" #gotoPage>
+          <span>{{' /'+maxPage+' '}}</span>
+          <input class="form-control" type="button" value="前往" (click)="goto(gotoPage.value)">
+          <input class="form-control" type="button" value="下一页" (click)="goto(page+1)">
+        </div>
+      </div>
+    </div>
+  </mk-box-content>
+
+</mk-box>

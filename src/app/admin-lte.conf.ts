@@ -9,28 +9,13 @@ export const adminLteConf = {
   // isSidebarRightOverContent: true,
   // layout: 'normal',
   sidebarLeftMenu: [
-    {label: 'MAIN NAVIGATION', separator: true},
-    {label: 'Get Started', route: '/', iconClasses: 'fa fa-road', pullRights: [{text: 'New', classes: 'label pull-right bg-green'}]},
-    {label: 'Layout', iconClasses: 'fa fa-th-list', children: [
-        {label: 'Configuration', route: 'layout/configuration'},
-        {label: 'Custom', route: 'layout/custom'},
-        {label: 'Header', route: 'layout/header'},
-        {label: 'Sidebar Left', route: 'layout/sidebar-left'},
-        {label: 'Sidebar Right', route: 'layout/sidebar-right'},
-        {label: 'Content', route: 'layout/content'}
+    {label: '主菜单', separator: true},
+    {label: '账户管理', iconClasses: 'fa fa-user-circle',children:[
+        {label:'账户信息',route: 'user', iconClasses: 'fa fa-user-circle'},
+        {label:'操作记录',route: 'log/user', iconClasses: 'fa fa-book'}
       ]},
-    {label: 'COMPONENTS', separator: true},
-    {label: 'Accordion', route: 'accordion', iconClasses: 'fa fa-tasks'},
-    {label: 'Alert', route: 'alert', iconClasses: 'fa fa-exclamation-triangle'},
-    {label: 'Boxs', iconClasses: 'fa fa-files-o', children: [
-        {label: 'Default Box', route: 'boxs/box'},
-        {label: 'Info Box', route: 'boxs/info-box'},
-        {label: 'Small Box', route: 'boxs/small-box'}
-      ]},
-    {label: 'Dropdown', route: 'dropdown', iconClasses: 'fa fa-arrows-v'},
-    {label: 'Form', iconClasses: 'fa fa-files-o', children: [
-        {label: 'Input Text', route: 'form/input-text'}
-    ]},
-    {label: 'Tabs', route: 'tabs', iconClasses: 'fa fa-th'}
+    {label: '设备管理', route: 'device', iconClasses: 'fa fa-desktop'},
+    {label: '数据分析', route: 'sensor', iconClasses: 'fa fa-list'},
+    {label: '报警历史', route: 'log/alarm', iconClasses: 'fa fa-book'},
   ]
 };
