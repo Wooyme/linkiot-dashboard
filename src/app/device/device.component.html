@@ -1,11 +1,10 @@
-<mk-box [isRemovable]="true">
+<mk-box [isRemovable]="false">
   <mk-box-header>
-    <div class="btn-toolbar">
-      <button class="btn btn-success" (click)="add()" *ngIf="user.me.level<2">添加设备</button>
-    </div>
+      <button class="btn btn-success pull-right" (click)="add()" *ngIf="user.me.level<2">添加设备</button>
   </mk-box-header>
   <mk-box-content>
-    <div class="col-lg-12">
+    <button class="btn btn-default btn-xs" style="margin-bottom: 10px" (click)="showTable=!showTable">切换显示</button>
+    <div class="col-lg-12" style="padding: 0" *ngIf="showTable">
       <div class="table-responsive">
         <table class="table table-bordered">
           <thead>
@@ -29,7 +28,7 @@
             <td>{{device.lastLoginTime==null?'从未登录':device.lastLoginTime}}</td>
             <td>
               <div class="btn-toolbar" style="display: flex">
-                <button class="btn btn-danger btn-xs">报警设置</button>
+                <button class="btn btn-info btn-xs" (click)="detail(device)">状态控制</button>
                 <button class="btn btn-primary btn-xs" (click)="gotoSensors(device.deviceId)">传感器管理</button>
                 <button class="btn btn-success btn-xs" (click)="edit(device)" *ngIf="user.me.level<2">编辑</button>
                 <button class="btn btn-danger btn-xs" *ngIf="user.me.level<2">删除</button>
@@ -40,43 +39,20 @@
         </table>
       </div>
     </div>
-    <div class="col-lg-12">
-      <div class="form-inline">
-        <div class="form-group pull-right">
-          <input class="form-control" type="button" value="上一页" [disabled]="page==1" (click)="goto(page-1)">
-          <input class="form-control" style="width: 60px" type="text" [value]="page" #gotoPage>
-          <span>{{' /'+maxPage+' '}}</span>
-          <input class="form-control" type="button" value="前往" (click)="goto(gotoPage.value)">
-          <input class="form-control" type="button" value="下一页" (click)="goto(page+1)">
-        </div>
-      </div>
-    </div>
-  </mk-box-content>
-
-</mk-box>
-<mk-box [isRemovable]="true">
-  <mk-box-header>
-    <div class="btn-toolbar">
-      <button class="btn btn-success" (click)="add()" *ngIf="user.me.level<2">添加设备</button>
-    </div>
-  </mk-box-header>
-  <mk-box-content>
-    <div class="col-lg-12">
+    <div class="col-lg-12" style="padding: 0" *ngIf="!showTable">
       <div class="col-lg-4" *ngFor="let device of devices">
         <div class="info-box">
-          <span class="info-box-icon bg-aqua">
+          <span class="info-box-icon bg-aqua" (click)="detail(device)">
             <img *ngIf="device['image']!=null && device['image']!=undefined && device['image']!=''"
                  [src]="device['image']">
             <i class="fa fa-android"
                *ngIf="device['image']==null || device['image']==undefined || device['image']==''"></i>
           </span>
           <div class="info-box-content">
-            <span class="info-box-text">{{device.name}}</span>
+            <span class="info-box-text">{{device.name}}:{{device.state==0?'离线':'在线'}}</span>
             <span class="info-box-text">设备ID:{{device.deviceId}}</span>
             <span class="info-box-text">设备秘钥:{{device.secret}}</span>
-            <span class="info-box-text">上次登录:{{device.lastLoginTime==null?'从未登录':device.lastLoginTime}}</span>
             <div class="btn-toolbar" style="display: flex">
-              <button class="btn btn-danger btn-xs">报警设置</button>
               <button class="btn btn-primary btn-xs" (click)="gotoSensors(device.deviceId)">传感器管理</button>
               <button class="btn btn-success btn-xs" (click)="edit(device)" *ngIf="user.me.level<2">编辑</button>
               <button class="btn btn-danger btn-xs" *ngIf="user.me.level<2">删除</button>
@@ -91,13 +67,12 @@
         <div class="form-group pull-right">
           <input class="form-control" type="button" value="上一页" [disabled]="page==1" (click)="goto(page-1)">
           <input class="form-control" style="width: 60px" type="text" [value]="page" #gotoPage>
-          <span>{{' /'+maxPage+' '}}</span>
+          <span>{{' /'+maxPage.toString()+' '}}</span>
           <input class="form-control" type="button" value="前往" (click)="goto(gotoPage.value)">
           <input class="form-control" type="button" value="下一页" (click)="goto(page+1)">
         </div>
       </div>
     </div>
   </mk-box-content>
-
 </mk-box>
 

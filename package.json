@@ -1,5 +1,5 @@
 {
-  "name": "angular-admin-lte-demo",
+  "name": "link-iot-dashboard",
   "version": "1.2.7",
   "keywords": [
     "angular",
@@ -48,8 +48,11 @@
     "angular-loading-page": "^0.6.0",
     "bootstrap-css-only": "^3.3.7",
     "core-js": "^2.5.4",
+    "echarts": "^4.1.0",
     "font-awesome": "^4.7.0",
     "ionicons": "^2.0.1",
+    "ngx-bootstrap": "^3.2.0",
+    "ngx-echarts": "^4.1.0",
     "prismjs": "^1.8.4",
     "rxjs": "^6.0.0",
     "rxjs-compat": "^6.3.3",

@@ -7,14 +7,14 @@ import { SensorComponent } from './sensor/sensor.component';
 import { AlarmLogComponent } from './alarm-log/alarm-log.component';
 import { UserLogComponent } from './user-log/user-log.component';
 import { DataComponent } from './data/data.component';
+import { HelpComponent } from './help/help.component';
+import { DataAnalysisComponent } from './data-analysis/data-analysis.component';
 
 const routes: Routes = [
   {
     path:'',
-    loadChildren: './login/login.module#LoginModule',
-    data: {
-      customLayout: true
-    }
+    redirectTo: 'login',
+    pathMatch: 'full'
   },
   {
     path: 'user',
@@ -41,6 +41,12 @@ const routes: Routes = [
     },
     component: DataComponent
   },{
+    path: 'analysis',
+    data: {
+      title: '数据分析'
+    },
+    component: DataAnalysisComponent
+  },{
     path: 'log/alarm',
     data:{
       title: '报警日志'
@@ -52,6 +58,12 @@ const routes: Routes = [
       title: '操作日志'
     },
     component:UserLogComponent
+  },{
+    path: 'help',
+    component: HelpComponent,
+    data:{
+      title: '帮助'
+    }
   }, {
     path: 'login',
     loadChildren: './login/login.module#LoginModule',

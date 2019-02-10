@@ -1,0 +1,11 @@
+<h2><a href="#使用说明" id="使用说明">使用说明</a></h2>
+<h3><a href="#1绑定脚本" id="1绑定脚本">1.绑定脚本</a></h3>
+<p>本平台采用了一种自定义程度非常高的设备控制、数据处理方式——<strong>自定义脚本</strong>。因此需要在创建设备的时候手动配置JavaScript代码。
+  除了JavaScript自带的功能外，平台还加入了新的函数、变量用于处理各种事务。</p>
+<ul>
+  <li>{{'things: {&quot;data&quot;:object,&quot;device&quot;:Device}，things变量包含了本次接收到的数据和该设备的信息'}}</li>
+  <li>{{'funcStorage(things:{}): funcStorage用于将数据存储到数据库中'}}</li>
+  <li>{{'funcRedirect(things,{&quot;urls&quot;:[url1,url2]}): funcRedirect可以将本次接收到的数据转发到参数规定的url中'}}</li>
+  <li>{{'funcAlarm(things,{&quot;level&quot;:level,&quot;email&quot;:email,&quot;url&quot;:url,&quot;phone&quot;:phone}): funcAlarm可以将本次的报警等级，收到的信息，报警设备通过邮箱、网页、短信的形式发送给用户,配合条件判断使用。'}}</li>
+  <li>返回值: 需要注意的是，在脚本中不应使用return。最后执行的表达式即为返回值。</li>
+</ul>

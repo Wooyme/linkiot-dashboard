@@ -1,0 +1,76 @@
+<mk-box *ngIf="!removeMode">
+  <mk-box-content>
+    <button class="btn btn-default" (click)="removeMode=!removeMode"><i class="fa fa-refresh"></i></button>
+    <div style="margin-left: 10px" class="btn-group" dropdown [insideClick]="true">
+      <input [value]="(selectedDevice==null)?'选择设备...':selectedDevice.name+'/'+selectedDevice.deviceId" dropdownToggle
+             type="button" style="width: 200px;" class="form-control dropdown-toggle">
+      <ul *dropdownMenu class="dropdown-menu" style="width: 100%" role="menu" autoClose="onOutsideClick">
+        <li role="menuitem" *ngFor="let device of devices">
+          <a class="dropdown-item"
+             (click)="selectedDevice=device;refreshSensor()">{{device.name}}/{{device.deviceId}}</a>
+        </li>
+        <li class="divider dropdown-divider"></li>
+        <li>
+          <div style="display:inline-block;text-align: center;width: 100%">
+            <a (click)="gotoDevice(pageDevice-1)"><<</a>
+            <input style="width: 50px;text-align: center" [(ngModel)]="pageDevice">/{{maxPageDevice}}
+            <a (click)="gotoDevice(pageDevice)">前往</a>
+            <a (click)="gotoDevice(pageDevice+1)">>></a>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div *ngIf="selectedDevice!=null" class="btn-group" style="margin-left: 10px" dropdown [insideClick]="true">
+      <input [value]="(selectedSensor==null)?'选择传感器...':selectedSensor.name+'/'+selectedSensor.id" dropdownToggle
+             type="button" style="width: 200px;" class="form-control dropdown-toggle">
+      <ul *dropdownMenu class="dropdown-menu" style="width: 100%" role="menu" autoClose="onOutsideClick">
+        <li role="menuitem" *ngFor="let sensor of sensors">
+          <a class="dropdown-item" (click)="selectedSensor=sensor;countData()">{{sensor.name}}/{{sensor.id}}</a>
+        </li>
+        <li class="divider dropdown-divider"></li>
+        <li>
+          <div style="display:inline-block;text-align: center;width: 100%">
+            <a (click)="gotoSensor(pageSensor-1)"><<</a>
+            <input style="width: 50px;text-align: center" [(ngModel)]="pageSensor">/{{maxPageSensor}}
+            <a (click)="gotoSensor(pageSensor)">前往</a>
+            <a (click)="gotoSensor(pageSensor+1)">>></a>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div *ngIf="selectedDevice!=null && selectedSensor!=null" class="btn-group" style="margin-left: 10px">
+      <div class="form-inline">
+        <input class="form-control" style="width: 80px;" placeholder="起始记录" #offset> -
+        <input class="form-control" style="width: 80px;" placeholder="终止记录" #end>
+        (总条数:{{maxData}})
+        <select class="form-control" [(ngModel)]="selectedChartIndex">
+          <option *ngFor="let setting of chartsSettings;let i=index" [value]="i">{{setting.title}}</option>
+          <option *ngFor="let setting of chartOptions;let i=index" [value]="-i-1" (click)="name.value=setting.name">
+            {{setting.name}}
+          </option>
+        </select>
+        <input class="form-control" style="width: 100px;margin-left: 10px;" placeholder="标注" #legend>
+        <input class="form-control" style="width: 100px;margin-left: 10px" placeholder="命名" #name>
+        <button class="btn btn-default" style="margin-left: 10px"
+                (click)="addChart(offset.value,end.value,legend.value,name.value)">添加
+        </button>
+      </div>
+    </div>
+  </mk-box-content>
+</mk-box>
+<mk-box *ngIf="removeMode">
+  <mk-box-content>
+    <button class="btn btn-default" (click)="removeMode=!removeMode">返回</button>
+    <button style="margin-left: 10px;" class="btn btn-danger" (click)="clear()">删除全部</button>
+  </mk-box-content>
+</mk-box>
+<div class="row">
+  <div *ngFor="let option of chartOptions;let i=index" [class]="option.class">
+    <mk-box>
+      <mk-box-content>
+        <div echarts [options]="option.option" style="height: 200px" (chartInit)="onChartInit($event)"></div>
+        <button *ngIf="removeMode" class="btn btn-default" (click)="remove(i)">删除</button>
+      </mk-box-content>
+    </mk-box>
+  </div>
+</div>

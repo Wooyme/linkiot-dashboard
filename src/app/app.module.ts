@@ -13,7 +13,7 @@ import { HomeComponent } from './home/home.component';
 
 import { LoadingPageModule, MaterialBarModule } from 'angular-loading-page';
 import { AddUser, DeleteUser, EditUser, UserComponent } from './user/user.component';
-import { AddDeviceComponent, DeviceComponent, EditDeviceComponent } from './device/device.component';
+import { AddDeviceComponent, DeviceComponent, DeviceDetail, EditDeviceComponent } from './device/device.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ApiModule } from '../api';
 import { ModalComponent, ModalDirective } from './modal/modal.component';
@@ -23,6 +23,10 @@ import { AlarmLogComponent, AlarmLogDelEnsure, AlarmLogDetail } from './alarm-lo
 import { UserLogComponent, UserLogDetail } from './user-log/user-log.component';
 import { LogoutEnsure } from './core/header-inner/header-inner.component';
 import { DataComponent } from './data/data.component';
+import { HelpComponent } from './help/help.component';
+import { DataAnalysisComponent } from './data-analysis/data-analysis.component';
+import { NgxEchartsModule } from 'ngx-echarts';
+import { BsDropdownModule } from 'ngx-bootstrap';
 
 
 @NgModule({
@@ -36,7 +40,10 @@ import { DataComponent } from './data/data.component';
     ApiModule,
     FormsModule,
     MkAlertModule,
-    BoxModule
+    BoxModule,
+    NgxEchartsModule,
+    BsDropdownModule.forRoot()
+
   ],
   declarations: [
     AppComponent,
@@ -47,6 +54,7 @@ import { DataComponent } from './data/data.component';
     EditUser,
     DeleteUser,
     DeviceComponent,
+    DeviceDetail,
     ModalComponent,
     ModalDirective,
     AddDeviceComponent,
@@ -60,9 +68,12 @@ import { DataComponent } from './data/data.component';
     AlarmLogDelEnsure,
     UserLogComponent,
     UserLogDetail,
-    DataComponent
+    DataComponent,
+    HelpComponent,
+    DataAnalysisComponent
   ],
-  entryComponents:[ AddDeviceComponent,EditDeviceComponent,AlarmLogDetail,AlarmLogDelEnsure
+  entryComponents:[ AddDeviceComponent,EditDeviceComponent,DeviceDetail
+    ,AlarmLogDetail,AlarmLogDelEnsure
     ,AddUser,EditUser,DeleteUser,UserLogDetail
     ,LogoutEnsure
     ,AddSensor,EditSensor,DeleteSensor],

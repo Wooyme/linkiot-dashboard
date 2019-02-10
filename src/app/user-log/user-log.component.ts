@@ -55,7 +55,7 @@ export class UserLogComponent implements OnInit {
     this.modal.modal(UserLogDetail,log)
   }
 
-  goto(page:string){
+  goto(page:string | number){
     this.page = Number(page);
     this.refresh();
   }

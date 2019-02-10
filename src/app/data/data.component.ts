@@ -42,7 +42,7 @@ export class DataComponent implements OnInit {
     })
   }
 
-  goto(page:string){
+  goto(page:string | number){
     this.page = Number(page);
     this.refresh();
   }
