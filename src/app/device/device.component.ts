@@ -16,6 +16,8 @@ export class DeviceComponent implements OnInit {
   limit = 12;
   maxPage:number;
   showTable:boolean = true;
+  filterName:string;
+  filterId:string;
   constructor(private api: DefaultService, private modal: ModalService,private router:Router,public user:UserService,private _route:ActivatedRoute) {
   }
 
@@ -27,7 +29,9 @@ export class DeviceComponent implements OnInit {
     this.api.countDevices().subscribe(value=>{
       this.maxPage = Math.ceil(value.count/this.limit);
     });
-    this.api.listDevices((this.page-1)*this.limit, this.limit).subscribe((devices: Device[]) => {
+    this.api.listDevices((this.page-1)*this.limit, this.limit
+      ,(this.filterId!='')?this.filterId:null
+      ,(this.filterName!='')?this.filterName:null).subscribe((devices: Device[]) => {
       this.devices = [];
       devices.forEach(value => {
         console.log(value.description);

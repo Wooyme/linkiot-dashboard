@@ -21,7 +21,7 @@ import { FormsModule } from '@angular/forms';
 import { AddSensor, DeleteSensor, EditSensor, SensorComponent } from './sensor/sensor.component';
 import { AlarmLogComponent, AlarmLogDelEnsure, AlarmLogDetail } from './alarm-log/alarm-log.component';
 import { UserLogComponent, UserLogDetail } from './user-log/user-log.component';
-import { LogoutEnsure } from './core/header-inner/header-inner.component';
+import { AlarmInfo, LogoutEnsure } from './core/header-inner/header-inner.component';
 import { DataComponent } from './data/data.component';
 import { HelpComponent } from './help/help.component';
 import { DataAnalysisComponent } from './data-analysis/data-analysis.component';
@@ -70,10 +70,11 @@ import { BsDropdownModule } from 'ngx-bootstrap';
     UserLogDetail,
     DataComponent,
     HelpComponent,
-    DataAnalysisComponent
+    DataAnalysisComponent,
+    AlarmInfo
   ],
   entryComponents:[ AddDeviceComponent,EditDeviceComponent,DeviceDetail
-    ,AlarmLogDetail,AlarmLogDelEnsure
+    ,AlarmLogDetail,AlarmLogDelEnsure,AlarmInfo
     ,AddUser,EditUser,DeleteUser,UserLogDetail
     ,LogoutEnsure
     ,AddSensor,EditSensor,DeleteSensor],

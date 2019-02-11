@@ -17,7 +17,8 @@ export class LoginComponent implements OnInit {
   login(email:string,password:string){
     this.api.getLogin(email,password).subscribe(result=>{
       if(result.status==1){
-        this.router.navigate(['device'])
+        this.router.navigate(['device']);
+
       }else{
         alert(result.message)
       }
