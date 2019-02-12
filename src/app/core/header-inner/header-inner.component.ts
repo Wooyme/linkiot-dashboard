@@ -53,8 +53,9 @@ export class HeaderInnerComponent {
 
   logout() {
     this.modal.modal(LogoutEnsure, {}).then(() => {
-      this.api.getLogout();
-      this.router.navigate(['/']);
+      this.api.getLogout().subscribe(()=>{
+        this.router.navigate(['/']);
+      });
     });
   }
 }
