@@ -1,5 +1,6 @@
 import { Component, NgZone, OnInit } from '@angular/core';
 import { DefaultService, Device, Sensor } from '../../api';
+import { UserService } from '../user.service';
 
 @Component({
   selector: 'app-data-analysis',
@@ -8,7 +9,7 @@ import { DefaultService, Device, Sensor } from '../../api';
 })
 export class DataAnalysisComponent implements OnInit {
 
-  selectedChartIndex: string = '0';
+  selectedChartIndex: number = 0;
   chartsSettings = [
     {type: 'line', class: 'col-lg-3', title: '折线图(小)'},
     {type: 'line', class: 'col-lg-6', title: '折线图(中)'},
@@ -36,12 +37,12 @@ export class DataAnalysisComponent implements OnInit {
   chartInstances: any[] = [];
 
   removeMode:boolean = false;
-  constructor(private api: DefaultService) {
+  constructor(public api: DefaultService,public me:UserService) {
   }
 
   ngOnInit() {
     this.refreshDevice();
-    const charts = JSON.parse(localStorage.getItem('charts'));
+    const charts = JSON.parse(localStorage.getItem('charts'+this.me.me.username));
     if (Array.isArray(charts)) {
       charts.forEach(value => {
         this.chartOptions.push(value);
@@ -51,13 +52,14 @@ export class DataAnalysisComponent implements OnInit {
 
   clear(){
     this.chartOptions = [];
-    localStorage.setItem("charts",JSON.stringify(this.chartOptions));
+    this.chartInstances = [];
+    localStorage.setItem('charts'+this.me.me.username,JSON.stringify(this.chartOptions));
   }
 
   remove(i:number){
     this.chartOptions.splice(i,1);
     this.chartInstances.splice(i,1);
-    localStorage.setItem('charts', JSON.stringify(this.chartOptions));
+    localStorage.setItem('charts'+this.me.me.username, JSON.stringify(this.chartOptions));
   }
 
   refreshDevice() {
@@ -111,7 +113,7 @@ export class DataAnalysisComponent implements OnInit {
     this.chartInstances.push(ec);
   }
 
-  addChart(dataOffset: string, dataEnd: string, legend: string, name: string) {
+  addChart(dataOffset: string|number, dataEnd: string|number, legend: string, name: string) {
     this.api.listData(this.selectedDevice.deviceId, this.selectedSensor.id, Number(dataOffset), Number(dataEnd) - Number(dataOffset)).subscribe(data => {
       const parsed = data.map(v => {
         return [new Date(v.updateTime), v.data];
@@ -131,6 +133,15 @@ export class DataAnalysisComponent implements OnInit {
         const option = {
           title: {
             text: name
+          },
+          tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+              type: 'cross',
+              label: {
+                backgroundColor: '#283b56'
+              }
+            }
           },
           color: ['#59a1f8', '#78c87d', '#f6d464', '#445285', '#8e67de', '#e36f7e', '#70c9ca', '#d396c6', '#b09e6c', '#4f58d5', '#96a36f'],
           legend: {
@@ -160,7 +171,7 @@ export class DataAnalysisComponent implements OnInit {
         };
         this.chartOptions.push({name: name, class: setting['class'], option: option, offset: [Number(dataOffset)], end: [Number(dataEnd)]});
       }
-      localStorage.setItem('charts', JSON.stringify(this.chartOptions));
+      localStorage.setItem('charts'+this.me.me.username, JSON.stringify(this.chartOptions));
     });
   }
 }

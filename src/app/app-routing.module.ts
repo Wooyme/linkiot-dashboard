@@ -9,6 +9,7 @@ import { UserLogComponent } from './user-log/user-log.component';
 import { DataComponent } from './data/data.component';
 import { HelpComponent } from './help/help.component';
 import { DataAnalysisComponent } from './data-analysis/data-analysis.component';
+import { WatcherComponent } from './watcher/watcher.component';
 
 const routes: Routes = [
   {
@@ -46,6 +47,12 @@ const routes: Routes = [
       title: '数据分析'
     },
     component: DataAnalysisComponent
+  },{
+    path: 'watcher',
+    data: {
+      title: '实时监控'
+    },
+    component: WatcherComponent
   },{
     path: 'log/alarm',
     data:{

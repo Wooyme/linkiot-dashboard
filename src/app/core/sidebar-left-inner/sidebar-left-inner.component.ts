@@ -17,38 +17,8 @@ export class SidebarLeftInnerComponent implements OnInit{
   }
 
   ngOnInit() {
-    this.sockJs.init();
-    this.api.getUser().subscribe(v => {
-      if(v.username==undefined){
-        this.route.navigate(['login']);
-      }
-      this.nickname = v.nickname;
-      this.avatar = v.avatar;
-      switch (v.level) {
-        case 0:
-          v['levelStr'] = "超级管理员";
-          break;
-        case 1:
-          v['levelStr'] = "普通管理员";
-          break;
-        case 2:
-          v['levelStr'] = "普通用户";
-          break;
-        default:
-          v['levelStr'] = "未知等级:" + v.level;
-          break;
-      }
-      this.me.setMe(v);
-    });
-    let timer;
-    timer= setInterval(()=>{
-      this.api.getUser().subscribe(v=>{
-        if(v.username==undefined){
-          clearInterval(timer);
-          this.route.navigate(['login'])
-        }
-      })
-    },60*1000);
+    this.nickname = this.me.me.nickname;
+    this.avatar = this.me.me.avatar;
   }
 
 }

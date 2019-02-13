@@ -10,6 +10,7 @@ export const adminLteConf = {
   // layout: 'normal',
   sidebarLeftMenu: [
     {label: '主菜单', separator: true},
+    {label: '实时监控', route: 'watcher', iconClasses: 'fa fa-bar-chart'},
     {label: '账户管理', iconClasses: 'fa fa-user-circle',children:[
         {label:'账户信息',route: 'user', iconClasses: 'fa fa-user-circle'},
         {label:'操作记录',route: 'log/user', iconClasses: 'fa fa-book'}

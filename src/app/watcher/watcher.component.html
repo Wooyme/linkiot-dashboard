@@ -20,8 +20,13 @@
         </li>
       </ul>
     </div>
-    <div *ngIf="selectedDevice!=null" class="btn-group" style="margin-left: 10px" dropdown [insideClick]="true">
-      <input [value]="(selectedSensor==null)?'选择传感器...':selectedSensor.name+'/'+selectedSensor.id" dropdownToggle
+    <div *ngIf="selectedDevice!=null" style="margin-left: 10px" class="btn-group" dropdown [insideClick]="true">
+      <input class="form-control dropdown-toggle" style="width: 100px" type="button"
+             [value]="dataOrState?'数据':'状态'" (click)="dataOrState=!dataOrState">
+    </div>
+    <div *ngIf="selectedDevice!=null && dataOrState" class="btn-group" style="margin-left: 10px" dropdown
+         [insideClick]="true">
+      <input [value]="(selectedSensor==null)?'选择传感器':selectedSensor.name+'/'+selectedSensor.id" dropdownToggle
              type="button" style="width: 200px;" class="form-control dropdown-toggle">
       <ul *dropdownMenu class="dropdown-menu" style="width: 100%" role="menu" autoClose="onOutsideClick">
         <li role="menuitem" *ngFor="let sensor of sensors">
@@ -38,21 +43,30 @@
         </li>
       </ul>
     </div>
-    <div *ngIf="selectedDevice!=null && selectedSensor!=null" class="btn-group" style="margin-left: 10px">
+    <div *ngIf="selectedDevice!=null && selectedSensor!=null && dataOrState" class="btn-group"
+         style="margin-left: 10px">
       <div class="form-inline">
-        <input class="form-control" style="width: 80px;" placeholder="起始记录" #offset> -
-        <input class="form-control" style="width: 80px;" placeholder="终止记录" #end>
-        (总条数:{{maxData}})
         <select class="form-control" [(ngModel)]="selectedChartIndex">
           <option *ngFor="let setting of chartsSettings;let i=index" [value]="i">{{setting.title}}</option>
-          <option *ngFor="let setting of chartOptions;let i=index" [value]="-i-1">
+          <option *ngFor="let setting of options;let i=index" [value]="-i-1" [disabled]="!setting.isData">
             {{setting.name}}
           </option>
         </select>
         <input class="form-control" style="width: 100px;margin-left: 10px;" placeholder="标注" #legend>
         <input [disabled]="selectedChartIndex<0" class="form-control" style="width: 100px;margin-left: 10px" placeholder="命名" #name>
         <button class="btn btn-default" style="margin-left: 10px"
-                (click)="addChart(offset.value,end.value,legend.value,name.value)">添加
+                (click)="addChart(selectedDevice.deviceId,selectedSensor.id,legend.value,name.value)">添加
+        </button>
+      </div>
+    </div>
+    <div *ngIf="selectedDevice!=null && !dataOrState" class="btn-group" style="margin-left: 10px">
+      <div class="form-inline">
+        <input class="form-control" style="width: 100px;margin-left: 10px" placeholder="命名" #name>
+        <button class="btn btn-default" style="margin-left: 10px"
+                (click)="editStateDetail()">编辑显示
+        </button>
+        <button class="btn btn-default" style="margin-left: 10px"
+                (click)="addStateBlock(selectedDevice.deviceId,name.value)">添加
         </button>
       </div>
     </div>
@@ -65,10 +79,26 @@
   </mk-box-content>
 </mk-box>
 <div class="row">
-  <div *ngFor="let option of chartOptions;let i=index" [class]="option.class">
+  <div *ngFor="let option of options;let i=index" [class]="option.class">
     <mk-box>
       <mk-box-content>
-        <div echarts [options]="option.option" style="height: 200px" (chartInit)="onChartInit($event)"></div>
+        <div *ngIf="option.isData" echarts [options]="option.option" style="height: 200px;"
+             (chartInit)="onChartInitWithIndex($event,i)"></div>
+        <div *ngIf="!option.isData" class="table-responsive">
+          <p>{{option.name}}</p>
+          <table class="table">
+            <tbody>
+            <tr>
+              <th>状态</th>
+              <th>记录</th>
+            </tr>
+            <tr *ngFor="let state of option.option.state">
+              <td>{{state.name}}</td>
+              <td>{{state.value}}</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
         <button *ngIf="removeMode" class="btn btn-default" (click)="remove(i)">删除</button>
       </mk-box-content>
     </mk-box>

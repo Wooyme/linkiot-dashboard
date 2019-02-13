@@ -9,7 +9,6 @@ import { CoreModule } from './core/core.module';
 import { AlertModule as MkAlertModule, BoxModule, LayoutModule } from 'angular-admin-lte';
 
 import { AppComponent } from './app.component';
-import { HomeComponent } from './home/home.component';
 
 import { LoadingPageModule, MaterialBarModule } from 'angular-loading-page';
 import { AddUser, DeleteUser, EditUser, UserComponent } from './user/user.component';
@@ -27,6 +26,7 @@ import { HelpComponent } from './help/help.component';
 import { DataAnalysisComponent } from './data-analysis/data-analysis.component';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { BsDropdownModule } from 'ngx-bootstrap';
+import { EditStateDetailModal, WatcherComponent } from './watcher/watcher.component';
 
 
 @NgModule({
@@ -48,7 +48,6 @@ import { BsDropdownModule } from 'ngx-bootstrap';
   declarations: [
     AppComponent,
     LogoutEnsure,
-    HomeComponent,
     UserComponent,
     AddUser,
     EditUser,
@@ -71,13 +70,16 @@ import { BsDropdownModule } from 'ngx-bootstrap';
     DataComponent,
     HelpComponent,
     DataAnalysisComponent,
-    AlarmInfo
+    AlarmInfo,
+    WatcherComponent,
+    EditStateDetailModal
   ],
   entryComponents:[ AddDeviceComponent,EditDeviceComponent,DeviceDetail
     ,AlarmLogDetail,AlarmLogDelEnsure,AlarmInfo
     ,AddUser,EditUser,DeleteUser,UserLogDetail
     ,LogoutEnsure
-    ,AddSensor,EditSensor,DeleteSensor],
+    ,AddSensor,EditSensor,DeleteSensor
+    ,EditStateDetailModal],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
