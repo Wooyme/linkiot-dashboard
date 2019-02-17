@@ -19,41 +19,12 @@ export class LoginComponent implements OnInit {
   login(email:string,password:string){
     this.api.getLogin(email,password).subscribe(result=>{
       if(result.status==1){
-        this.sockJs.init();
-        this.api.getUser().subscribe(v => {
-          if(v.username==undefined){
-            this.router.navigate(['login']);
-          }
-          switch (v.level) {
-            case 0:
-              v['levelStr'] = "超级管理员";
-              break;
-            case 1:
-              v['levelStr'] = "普通管理员";
-              break;
-            case 2:
-              v['levelStr'] = "普通用户";
-              break;
-            default:
-              v['levelStr'] = "未知等级:" + v.level;
-              break;
-          }
-          this.me.setMe(v);
-          this.router.navigate(['device']);
-        });
-        let timer;
-        timer = setInterval(()=>{
-          this.api.getUser().subscribe(v=>{
-            if(v.username==undefined){
-              clearInterval(timer);
-              this.router.navigate(['login'])
-            }
-          })
-        },60*1000);
+        this.router.navigate(['device']);
       }else{
         alert(result.message)
       }
     })
   }
+
 
 }

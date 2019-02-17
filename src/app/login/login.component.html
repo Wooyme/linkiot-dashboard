@@ -16,8 +16,11 @@
         <span class="glyphicon glyphicon-lock form-control-feedback"></span>
       </div>
       <div class="row">
+        <div class="col-xs-4">
+          <button class="btn btn-info btn-block btn-flat" (click)="login('test@hdussta.cn','888888')">测试登录</button>
+        </div>
         <!-- /.col -->
-        <div class="col-xs-push-8 col-xs-4">
+        <div class="col-xs-push-4 col-xs-4">
           <button type="submit" class="btn btn-primary btn-block btn-flat" (click)="login(email.value,password.value)">登录</button>
         </div>
         <!-- /.col -->
