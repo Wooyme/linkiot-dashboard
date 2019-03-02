@@ -13,7 +13,7 @@ import { AppComponent } from './app.component';
 import { LoadingPageModule, MaterialBarModule } from 'angular-loading-page';
 import { AddUser, DeleteUser, EditUser, UserComponent } from './user/user.component';
 import { AddDeviceComponent, DeviceComponent, DeviceDetail, EditDeviceComponent } from './device/device.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientJsonpModule, HttpClientModule } from '@angular/common/http';
 import { ApiModule } from '../api';
 import { ModalComponent, ModalDirective } from './modal/modal.component';
 import { FormsModule } from '@angular/forms';
@@ -27,6 +27,7 @@ import { DataAnalysisComponent } from './data-analysis/data-analysis.component';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { BsDropdownModule } from 'ngx-bootstrap';
 import { EditStateDetailModal, WatcherComponent } from './watcher/watcher.component';
+import { DeviceMapComponent } from './device-map/device-map.component';
 
 
 @NgModule({
@@ -42,7 +43,8 @@ import { EditStateDetailModal, WatcherComponent } from './watcher/watcher.compon
     MkAlertModule,
     BoxModule,
     NgxEchartsModule,
-    BsDropdownModule.forRoot()
+    BsDropdownModule.forRoot(),
+    HttpClientJsonpModule
 
   ],
   declarations: [
@@ -72,7 +74,8 @@ import { EditStateDetailModal, WatcherComponent } from './watcher/watcher.compon
     DataAnalysisComponent,
     AlarmInfo,
     WatcherComponent,
-    EditStateDetailModal
+    EditStateDetailModal,
+    DeviceMapComponent
   ],
   entryComponents:[ AddDeviceComponent,EditDeviceComponent,DeviceDetail
     ,AlarmLogDetail,AlarmLogDelEnsure,AlarmInfo

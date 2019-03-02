@@ -12,20 +12,26 @@ import { ModalService } from '../modal.service';
   styleUrls: ['./watcher.component.css']
 })
 export class WatcherComponent extends DataAnalysisComponent {
-  dataOrState: boolean = false;
+  typeSwitch: number = 0;
   selectedPairs:{parsed:string,raw:string}[] = [];
-  options:{name: string,device:string, class: string, option: any,isData:boolean}[]=[];
+  options:{name: string,device:string, class: string, option: any,isData:boolean,isMedia?:boolean,src?:string}[]=[];
+  mediaSettings = [
+    {type: 'image',class: 'col-lg-3',option:'230',title: '图像(小)'},
+    {type: 'image',class: 'col-lg-6',option:'340',title: '图像(中)'},
+    {type: 'image',class: 'col-lg-12',option:'680',title: '图像(大)'}
+  ];
+  selectedMediaIndex = 0;
   constructor(api: DefaultService, me: UserService, private sockJs: SockJsService,private modal:ModalService) {
     super(api, me);
   }
 
   ngOnInit() {
     this.refreshDevice();
-    const options:{name: string,device:string, class: string, option: any,isData:boolean}[]
+    const options:{name: string,device:string, class: string, option: any,isData:boolean,isMedia?:boolean,src?:string}[]
       = JSON.parse(localStorage.getItem('watcher'+this.me.me.username));
     if(Array.isArray(options)){
       options.forEach((option)=>{
-        if(option.isData){
+        if(option.isData && option.isMedia!=true){
           (<{device:string,sensor:number}[]>option.option['mine']).forEach((mine,i)=>{
             this.api.listData(mine.device,mine.sensor,0,50).subscribe(data=>{
               (<any[]>option.option['series'])[i]['data'] = data.map(v => {
@@ -34,7 +40,7 @@ export class WatcherComponent extends DataAnalysisComponent {
               option['chart'].setOption(option.option);
             });
           })
-        }else{
+        }else if(!option.isData){
           setInterval(()=>{
             this.api.getState(option.device).subscribe(v=>{
               if(v.status==1){
@@ -49,6 +55,13 @@ export class WatcherComponent extends DataAnalysisComponent {
         this.options.push(option);
       });
     }
+  }
+
+  onTypeSwitchClicked(){
+    if(this.typeSwitch<2)
+      this.typeSwitch+=1;
+    else
+      this.typeSwitch=0;
   }
 
   onChartInitWithIndex(ec,index){
@@ -68,6 +81,20 @@ export class WatcherComponent extends DataAnalysisComponent {
     });
   }
 
+  addImage(device:string,sensor:string|number){
+    this.api.countMedia(device,Number(sensor)).toPromise().then(data=>{
+      return this.api.listMedia(device,Number(sensor),data.from.toString(),"100","time").toPromise();
+    }).then(data=>{
+      const src = "http://link.hdussta.cn:7778/v1/file/sensor/media/"+device+"/"+sensor+"/"+data[0].name;
+      this.options.push({name:"",device:device,class: this.mediaSettings[this.selectedMediaIndex].class,option:this.mediaSettings[this.selectedMediaIndex].option,isData:true,isMedia:true,src:src});
+      const save = Object.assign([],this.options).map(v=>{
+        delete v['chart'];
+        return v;
+      });
+      localStorage.setItem('watcher'+this.me.me.username, JSON.stringify(save));
+    })
+  }
+
   addChart(device:string,sensor:string|number,legend: string, name: string) {
     this.api.listData(this.selectedDevice.deviceId, this.selectedSensor.id, 0, 50).subscribe(data => {
       const parsed = data.map(v => {
@@ -85,6 +112,7 @@ export class WatcherComponent extends DataAnalysisComponent {
         });
         this.options[-(Number(this.selectedChartIndex) + 1)]['chart'].setOption(option.option);
         // this.chartInstances[-(Number(this.selectedChartIndex) + 1)].setOption(option.option);
+        localStorage.setItem('watcher'+this.me.me.username, JSON.stringify(this.options));
       } else {
         const setting = this.chartsSettings[Number(this.selectedChartIndex)];
         const option = {
@@ -133,8 +161,11 @@ export class WatcherComponent extends DataAnalysisComponent {
         };
         this.options.push({device:device,name: name, class: setting['class'], option: option,isData:true});
       }
-      localStorage.setItem('watcher'+this.me.me.username, JSON.stringify(this.options));
-
+      const save = Object.assign([],this.options).map(v=>{
+        delete v['chart'];
+        return v;
+      });
+      localStorage.setItem('watcher'+this.me.me.username, JSON.stringify(save));
     });
   }
 

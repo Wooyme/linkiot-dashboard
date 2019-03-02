@@ -10,6 +10,7 @@ import { DataComponent } from './data/data.component';
 import { HelpComponent } from './help/help.component';
 import { DataAnalysisComponent } from './data-analysis/data-analysis.component';
 import { WatcherComponent } from './watcher/watcher.component';
+import { DeviceMapComponent } from './device-map/device-map.component';
 
 const routes: Routes = [
   {
@@ -29,6 +30,12 @@ const routes: Routes = [
       title: '设备管理'
     },
     component: DeviceComponent
+  },{
+    path: 'device/map',
+    data: {
+      title: '设备地图'
+    },
+    component: DeviceMapComponent
   }, {
     path: 'sensor/:deviceId',
     data: {
@@ -36,7 +43,7 @@ const routes: Routes = [
     },
     component: SensorComponent
   },{
-    path: 'data/:deviceId/:sensorId/:dataType/:showType',
+    path: 'data/:deviceId/:sensorId/:dataType',
     data: {
       title: '详细数据'
     },

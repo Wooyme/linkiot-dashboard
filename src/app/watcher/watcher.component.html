@@ -20,17 +20,19 @@
         </li>
       </ul>
     </div>
+    <!--数据展示-->
     <div *ngIf="selectedDevice!=null" style="margin-left: 10px" class="btn-group" dropdown [insideClick]="true">
       <input class="form-control dropdown-toggle" style="width: 100px" type="button"
-             [value]="dataOrState?'数据':'状态'" (click)="dataOrState=!dataOrState">
+             [value]="typeSwitch==0?'数据':typeSwitch==1?'状态':'媒体'" (click)="onTypeSwitchClicked()">
     </div>
-    <div *ngIf="selectedDevice!=null && dataOrState" class="btn-group" style="margin-left: 10px" dropdown
+    <div *ngIf="selectedDevice!=null && (typeSwitch==0 || typeSwitch==2)" class="btn-group" style="margin-left: 10px"
+         dropdown
          [insideClick]="true">
       <input [value]="(selectedSensor==null)?'选择传感器':selectedSensor.name+'/'+selectedSensor.id" dropdownToggle
              type="button" style="width: 200px;" class="form-control dropdown-toggle">
       <ul *dropdownMenu class="dropdown-menu" style="width: 100%" role="menu" autoClose="onOutsideClick">
         <li role="menuitem" *ngFor="let sensor of sensors">
-          <a class="dropdown-item" (click)="selectedSensor=sensor;countData()">{{sensor.name}}/{{sensor.id}}</a>
+          <a class="dropdown-item" (click)="selectedSensor=sensor">{{sensor.name}}/{{sensor.id}}</a>
         </li>
         <li class="divider dropdown-divider"></li>
         <li>
@@ -43,23 +45,37 @@
         </li>
       </ul>
     </div>
-    <div *ngIf="selectedDevice!=null && selectedSensor!=null && dataOrState" class="btn-group"
+    <div *ngIf="selectedDevice!=null && selectedSensor!=null && (typeSwitch==0 || typeSwitch==2)" class="btn-group"
          style="margin-left: 10px">
       <div class="form-inline">
-        <select class="form-control" [(ngModel)]="selectedChartIndex">
-          <option *ngFor="let setting of chartsSettings;let i=index" [value]="i">{{setting.title}}</option>
-          <option *ngFor="let setting of options;let i=index" [value]="-i-1" [disabled]="!setting.isData">
-            {{setting.name}}
-          </option>
-        </select>
-        <input class="form-control" style="width: 100px;margin-left: 10px;" placeholder="标注" #legend>
-        <input [disabled]="selectedChartIndex<0" class="form-control" style="width: 100px;margin-left: 10px" placeholder="命名" #name>
-        <button class="btn btn-default" style="margin-left: 10px"
-                (click)="addChart(selectedDevice.deviceId,selectedSensor.id,legend.value,name.value)">添加
-        </button>
+        <!--媒体文件情况-->
+        <div style="display: inline-block;" *ngIf="typeSwitch==2">
+          <select class="form-control" [(ngModel)]="selectedMediaIndex">
+            <option *ngFor="let setting of mediaSettings;let i=index" [value]="i">{{setting.title}}</option>
+          </select>
+          <button class="btn btn-default" style="margin-left: 10px"
+                  (click)="addImage(selectedDevice.deviceId,selectedSensor.id)">添加
+          </button>
+        </div>
+        <!--数值情况-->
+        <div style="display: inline-block;" *ngIf="typeSwitch==0">
+          <select class="form-control" [(ngModel)]="selectedChartIndex">
+            <option *ngFor="let setting of chartsSettings;let i=index" [value]="i">{{setting.title}}</option>
+            <option *ngFor="let setting of options;let i=index" [value]="-i-1" [disabled]="!setting.isData">
+              {{setting.name}}
+            </option>
+          </select>
+          <input class="form-control" style="width: 100px;margin-left: 10px;" placeholder="标注" #legend>
+          <input [disabled]="selectedChartIndex<0" class="form-control" style="width: 100px;margin-left: 10px"
+                 placeholder="命名" #name>
+          <button class="btn btn-default" style="margin-left: 10px"
+                  (click)="addChart(selectedDevice.deviceId,selectedSensor.id,legend.value,name.value)">添加
+          </button>
+        </div>
       </div>
     </div>
-    <div *ngIf="selectedDevice!=null && !dataOrState" class="btn-group" style="margin-left: 10px">
+    <!--状态展示-->
+    <div *ngIf="selectedDevice!=null && typeSwitch==1" class="btn-group" style="margin-left: 10px">
       <div class="form-inline">
         <input class="form-control" style="width: 100px;margin-left: 10px" placeholder="命名" #name>
         <button class="btn btn-default" style="margin-left: 10px"
@@ -82,8 +98,14 @@
   <div *ngFor="let option of options;let i=index" [class]="option.class">
     <mk-box>
       <mk-box-content>
-        <div *ngIf="option.isData" echarts [options]="option.option" style="height: 200px;"
+        <!--媒体型数据-->
+        <div *ngIf="option.isMedia">
+          <img [src]="option.src" [height]="option.option">
+        </div>
+        <!--数据图表-->
+        <div *ngIf="option.isData && option.isMedia!=true" echarts [options]="option.option" style="height: 200px;"
              (chartInit)="onChartInitWithIndex($event,i)"></div>
+        <!--状态列表-->
         <div *ngIf="!option.isData" class="table-responsive">
           <p>{{option.name}}</p>
           <table class="table">

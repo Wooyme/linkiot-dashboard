@@ -15,7 +15,6 @@ export class DataComponent implements OnInit {
   deviceId:string;
   sensorId:number;
   dataType: number;
-  showType: {unit:string};
   constructor(private api:DefaultService,private router:ActivatedRoute) {
 
   }
@@ -25,21 +24,32 @@ export class DataComponent implements OnInit {
       this.deviceId = value['deviceId'];
       this.sensorId = Number(value['sensorId']);
       this.dataType = Number(value['dataType']);
-      this.showType = JSON.parse(value['showType']);
       this.refresh();
     })
   }
 
   refresh(){
-    this.api.countData(this.deviceId,this.sensorId).subscribe(value=>{
-      this.maxPage = Math.ceil(value.count/this.limit);
-    });
-    this.api.listData(this.deviceId,this.sensorId,(this.page-1)*this.limit,this.limit).toPromise().then(value=>{
-      this.data = [];
-      value.forEach(v=>{
-        this.data.push(v);
+    if(this.dataType!=3) {
+      this.api.countData(this.deviceId, this.sensorId).subscribe(value => {
+        this.maxPage = Math.ceil(value.count / this.limit);
+      });
+      this.api.listData(this.deviceId, this.sensorId, (this.page - 1) * this.limit, this.limit).toPromise().then(value => {
+        this.data = [];
+        value.forEach(v => {
+          this.data.push(v);
+        })
       })
-    })
+    }else{
+      this.api.countMedia(this.deviceId,this.sensorId).toPromise().then(value=>{
+        this.maxPage = Math.ceil(value.count / this.limit);
+        return this.api.listMedia(this.deviceId,this.sensorId,((this.page - 1) * this.limit).toString(), this.limit.toString(),"index").toPromise()
+      }).then(value=>{
+        this.data = [];
+        value.forEach(v=>{
+          this.data.push({data:this.api.mediaPath(this.deviceId,this.sensorId.toString(),v.name),updateTime:new Date(Number(v.name)).toString()})
+        })
+      })
+    }
   }
 
   goto(page:string | number){

@@ -85,7 +85,6 @@ export class LogoutEnsure implements ModalValue {
     this.callback({});
     this.close();
   }
-
 }
 
 @Component({

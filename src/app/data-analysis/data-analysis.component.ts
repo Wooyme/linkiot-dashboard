@@ -16,7 +16,7 @@ export class DataAnalysisComponent implements OnInit {
     {type: 'line', class: 'col-lg-12', title: '折线图(大)'},
     {type: 'bar', class: 'col-lg-3', title: '柱状图(小)'},
     {type: 'bar', class: 'col-lg-6', title: '柱状图(中)'},
-    {type: 'bar', class: 'col-lg-12', title: '柱状图(大)'}
+    {type: 'bar', class: 'col-lg-12', title: '柱状图(大)'},
   ];
   limit: number = 10;
 
@@ -36,13 +36,14 @@ export class DataAnalysisComponent implements OnInit {
   chartOptions: { name: string, class: string, option: any, offset: number[], end: number[] }[] = [];
   chartInstances: any[] = [];
 
-  removeMode:boolean = false;
-  constructor(public api: DefaultService,public me:UserService) {
+  removeMode: boolean = false;
+
+  constructor(public api: DefaultService, public me: UserService) {
   }
 
   ngOnInit() {
     this.refreshDevice();
-    const charts = JSON.parse(localStorage.getItem('charts'+this.me.me.username));
+    const charts = JSON.parse(localStorage.getItem('charts' + this.me.me.username));
     if (Array.isArray(charts)) {
       charts.forEach(value => {
         this.chartOptions.push(value);
@@ -50,16 +51,16 @@ export class DataAnalysisComponent implements OnInit {
     }
   }
 
-  clear(){
+  clear() {
     this.chartOptions = [];
     this.chartInstances = [];
-    localStorage.setItem('charts'+this.me.me.username,JSON.stringify(this.chartOptions));
+    localStorage.setItem('charts' + this.me.me.username, JSON.stringify(this.chartOptions));
   }
 
-  remove(i:number){
-    this.chartOptions.splice(i,1);
-    this.chartInstances.splice(i,1);
-    localStorage.setItem('charts'+this.me.me.username, JSON.stringify(this.chartOptions));
+  remove(i: number) {
+    this.chartOptions.splice(i, 1);
+    this.chartInstances.splice(i, 1);
+    localStorage.setItem('charts' + this.me.me.username, JSON.stringify(this.chartOptions));
   }
 
   refreshDevice() {
@@ -92,6 +93,7 @@ export class DataAnalysisComponent implements OnInit {
   }
 
   countData() {
+
     this.api.countData(this.selectedDevice.deviceId, this.selectedSensor.id).subscribe(value => {
       this.maxData = value.count;
     });
@@ -109,11 +111,11 @@ export class DataAnalysisComponent implements OnInit {
     this.refreshSensor();
   }
 
-  onChartInit(ec){
+  onChartInit(ec) {
     this.chartInstances.push(ec);
   }
 
-  addChart(dataOffset: string|number, dataEnd: string|number, legend: string, name: string) {
+  addChart(dataOffset: string | number, dataEnd: string | number, legend: string, name: string) {
     this.api.listData(this.selectedDevice.deviceId, this.selectedSensor.id, Number(dataOffset), Number(dataEnd) - Number(dataOffset)).subscribe(data => {
       const parsed = data.map(v => {
         return [new Date(v.updateTime), v.data];
@@ -171,7 +173,7 @@ export class DataAnalysisComponent implements OnInit {
         };
         this.chartOptions.push({name: name, class: setting['class'], option: option, offset: [Number(dataOffset)], end: [Number(dataEnd)]});
       }
-      localStorage.setItem('charts'+this.me.me.username, JSON.stringify(this.chartOptions));
+      localStorage.setItem('charts' + this.me.me.username, JSON.stringify(this.chartOptions));
     });
   }
 }

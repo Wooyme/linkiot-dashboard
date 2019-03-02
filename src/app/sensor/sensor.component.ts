@@ -63,7 +63,7 @@ export class SensorComponent implements OnInit {
   }
 
   gotoData(sensor:Sensor){
-    this.next.navigate(['data',this.deviceId,sensor.id,sensor.dataType,sensor.showType])
+    this.next.navigate(['data',this.deviceId,sensor.id,sensor.dataType])
   }
 
   refresh(){
@@ -77,8 +77,9 @@ export class SensorComponent implements OnInit {
           case 0: v['dataTypeStr'] = "数值型"; break;
           case 1: v['dataTypeStr'] = "文本型"; break;
           case 2: v['dataTypeStr'] = "坐标型"; break;
-          case 3: v['dataTypeStr'] = "布朗型"; break;
-          case 4: v['dataTypeStr'] = "JSON"; break;
+          case 3: v['dataTypeStr'] = "媒体型"; break;
+          case 4: v['dataTypeStr'] = "布朗型"; break;
+          case 5: v['dataTypeStr'] = "JSON"; break;
           default: v['dataTypeStr'] = "未知类型:"+v.dataType; break;
         }
         this.sensors.push(v)
@@ -106,8 +107,9 @@ export class SensorComponent implements OnInit {
           <option value="0">数值型</option>
           <option value="1">文本型</option>
           <option value="2">坐标型</option>
-          <option value="3">布朗型</option>
-          <option value="4">JSON</option>
+          <option value="3">媒体型</option>
+          <option value="4">布朗型</option>
+          <option value="5">JSON</option>
         </select>
         <div *ngIf="type==0">
           <label for="input-unit" >单位</label>

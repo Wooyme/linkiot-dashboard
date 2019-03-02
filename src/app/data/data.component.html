@@ -14,7 +14,8 @@
           <tbody>
           <tr *ngFor="let single of data">
             <td><input type="checkbox"></td>
-            <td>{{single.data}}</td>
+            <td *ngIf="dataType!=3">{{single.data}}</td>
+            <td *ngIf="dataType==3"><img [src]="single.data" style="width: 100%;height: auto"></td>
             <td>{{single.updateTime}}</td>
           </tr>
           </tbody>

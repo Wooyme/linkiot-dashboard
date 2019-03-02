@@ -34,8 +34,7 @@ export class DeviceComponent implements OnInit {
       ,(this.filterName!='')?this.filterName:null).subscribe((devices: Device[]) => {
       this.devices = [];
       devices.forEach(value => {
-        console.log(value.description);
-        try{value['image'] = JSON.parse(value.description)['image'];console.log(value['image'])}catch (e) {}
+        try{value['image'] = JSON.parse(value.description)['image'];}catch (e) {}
         this.devices.push(value);
       });
     });

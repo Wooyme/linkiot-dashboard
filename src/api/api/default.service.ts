@@ -37,6 +37,8 @@ import { Sensor } from '../model/sensor';
 import { SimpleStatus } from '../model/simpleStatus';
 import { User } from '../model/user';
 import { UserLog } from '../model/userLog';
+import { Media } from '../model/media';
+import { MediaCount } from '../model/mediaCount';
 
 import { BASE_PATH, COLLECTION_FORMATS } from '../variables';
 import { Configuration } from '../configuration';
@@ -73,6 +75,122 @@ export class DefaultService {
       }
     }
     return false;
+  }
+
+  public mediaPath(deviceId:string,sensorId:string,name:string):string{
+    return `${this.basePath}/file/sensor/media/${deviceId}/${sensorId}/${name}`
+  }
+
+  /**
+   * 统计传感器媒体数据
+   *
+   * @param deviceId 设备ID
+   * @param sensorId 传感器ID
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public countMedia(deviceId: string, sensorId: number, observe?: 'body', reportProgress?: boolean): Observable<MediaCount>;
+  public countMedia(deviceId: string, sensorId: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<MediaCount>>;
+  public countMedia(deviceId: string, sensorId: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<MediaCount>>;
+  public countMedia(deviceId: string, sensorId: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    if (deviceId === null || deviceId === undefined) {
+      throw new Error('Required parameter deviceId was null or undefined when calling countMedia.');
+    }
+    if (sensorId === null || sensorId === undefined) {
+      throw new Error('Required parameter sensorId was null or undefined when calling countMedia.');
+    }
+
+    let headers = this.defaultHeaders;
+
+    // to determine the Accept header
+    let httpHeaderAccepts: string[] = [
+      'application/json'
+    ];
+    const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    if (httpHeaderAcceptSelected != undefined) {
+      headers = headers.set('Accept', httpHeaderAcceptSelected);
+    }
+
+    // to determine the Content-Type header
+    const consumes: string[] = [
+    ];
+
+    return this.httpClient.get(`${this.basePath}/db/sensor/media/count/${encodeURIComponent(String(deviceId))}/${encodeURIComponent(String(sensorId))}`,
+      {
+        withCredentials: this.configuration.withCredentials,
+        headers: headers,
+        observe: observe,
+        reportProgress: reportProgress
+      }
+    );
+  }
+
+  /**
+   * 获取传感器媒体数据
+   *
+   * @param deviceId
+   * @param sensorId
+   * @param offset
+   * @param limit
+   * @param split
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public listMedia(deviceId: string, sensorId: number, offset: string, limit: string, split: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Media>>;
+  public listMedia(deviceId: string, sensorId: number, offset: string, limit: string, split: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Media>>>;
+  public listMedia(deviceId: string, sensorId: number, offset: string, limit: string, split: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Media>>>;
+  public listMedia(deviceId: string, sensorId: number, offset: string, limit: string, split: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    if (deviceId === null || deviceId === undefined) {
+      throw new Error('Required parameter deviceId was null or undefined when calling listMedia.');
+    }
+    if (sensorId === null || sensorId === undefined) {
+      throw new Error('Required parameter sensorId was null or undefined when calling listMedia.');
+    }
+    if (offset === null || offset === undefined) {
+      throw new Error('Required parameter offset was null or undefined when calling listMedia.');
+    }
+    if (limit === null || limit === undefined) {
+      throw new Error('Required parameter limit was null or undefined when calling listMedia.');
+    }
+    if (split === null || split === undefined) {
+      throw new Error('Required parameter split was null or undefined when calling listMedia.');
+    }
+
+    let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+    if (offset !== undefined && offset !== null) {
+      queryParameters = queryParameters.set('offset', <any>offset);
+    }
+    if (limit !== undefined && limit !== null) {
+      queryParameters = queryParameters.set('limit', <any>limit);
+    }
+    if (split !== undefined && split !== null) {
+      queryParameters = queryParameters.set('split', <any>split);
+    }
+
+    let headers = this.defaultHeaders;
+
+    // to determine the Accept header
+    let httpHeaderAccepts: string[] = [
+      'application/json'
+    ];
+    const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    if (httpHeaderAcceptSelected != undefined) {
+      headers = headers.set('Accept', httpHeaderAcceptSelected);
+    }
+
+    // to determine the Content-Type header
+    const consumes: string[] = [
+    ];
+
+    return this.httpClient.get(`${this.basePath}/db/sensor/media/${encodeURIComponent(String(deviceId))}/${encodeURIComponent(String(sensorId))}`,
+      {
+        params: queryParameters,
+        withCredentials: this.configuration.withCredentials,
+        headers: headers,
+        observe: observe,
+        reportProgress: reportProgress
+      }
+    );
   }
 
 
